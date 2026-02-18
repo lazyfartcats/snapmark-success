@@ -84,18 +84,47 @@
            ✅ Capture Selection<br>
            ✅ All Annotation Tools</p>
         
-        <button class="btn" onclick="window.close()">Close & Start Using Pro</button>
+        <button class="btn" id="closeBtn">Close & Start Using Pro</button>
         
         <div class="instructions">
-            Click the SnapMark extension icon to start taking unlimited screenshots!
+            Click the SnapMark extension icon to start taking unlimited screenshots!<br>
+            <small style="margin-top: 10px; display: block;">(This tab will auto-close in <span id="countdown">5</span> seconds)</small>
         </div>
     </div>
     
     <script>
-        // Auto-close after 10 seconds
-        setTimeout(() => {
+        // Try to close window
+        document.getElementById('closeBtn').onclick = () => {
             window.close();
-        }, 10000);
+            // If that doesn't work, show message
+            setTimeout(() => {
+                document.getElementById('closeBtn').textContent = 'You can close this tab now ✓';
+                document.getElementById('closeBtn').style.background = '#4CAF50';
+            }, 100);
+        };
+        
+        // Countdown and auto-close
+        let seconds = 5;
+        const countdownEl = document.getElementById('countdown');
+        
+        const interval = setInterval(() => {
+            seconds--;
+            countdownEl.textContent = seconds;
+            
+            if (seconds <= 0) {
+                clearInterval(interval);
+                window.close();
+                // If can't close, just show done message
+                setTimeout(() => {
+                    document.querySelector('.container').innerHTML = `
+                        <div class="emoji">✅</div>
+                        <h1>All Set!</h1>
+                        <p>You can close this tab now.</p>
+                        <p style="margin-top: 20px;">Open the SnapMark extension to use your Pro features!</p>
+                    `;
+                }, 100);
+            }
+        }, 1000);
     </script>
 </body>
 </html>
